@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.EditText;
  * Created by Sripadmanaban on 3/19/2015.
  */
 public class CrimeFragment extends Fragment {
+
+    private static final String DATE_FORMAT = "LLL dd, yyyy, EEEE, HH:mm:ss zzz";
 
     private Crime mCrime;
 
@@ -55,7 +58,7 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(DateFormat.format(DATE_FORMAT, mCrime.getDate()));
         mDateButton.setEnabled(false);
 
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
