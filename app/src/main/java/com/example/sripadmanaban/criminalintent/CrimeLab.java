@@ -1,6 +1,7 @@
 package com.example.sripadmanaban.criminalintent;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -40,8 +41,9 @@ public class CrimeLab {
     }
 
     public Crime getCrime(UUID id) {
+        Log.d("CrimeLab", id + "");
         for(Crime crime : mCrimes) {
-            if(id == crime.getId()) {
+            if(id.equals(crime.getId())) {
                 return crime;
             }
         }
