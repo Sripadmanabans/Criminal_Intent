@@ -65,18 +65,18 @@ public class CrimeListFragment extends ListFragment {
             }
 
             // Configure the view for this crime
-            Crime c = getItem(position);
+            Crime crime = getItem(position);
 
             TextView titleTextView =
                     (TextView) convertView.findViewById(R.id.crime_list_item_titleTextView);
-            titleTextView.setText(c.getTitle());
+            titleTextView.setText(crime.getTitle());
 
             TextView dateTextView =
                     (TextView) convertView.findViewById(R.id.crime_list_item_dateTextView);
-            dateTextView.setText(c.getDate().toString());
+            dateTextView.setText(crime.getDate().toString());
             CheckBox solvedCheckBox =
                     (CheckBox) convertView.findViewById(R.id.crime_list_item_solvedCheckBox);
-            solvedCheckBox.setChecked(c.isSolved());
+            solvedCheckBox.setChecked(crime.isSolved());
 
             return convertView;
         }

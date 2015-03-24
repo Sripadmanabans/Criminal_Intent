@@ -1,8 +1,11 @@
 package com.example.sripadmanaban.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -15,18 +18,22 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
- *
  * The fragment where the crime is reported
  * Created by Sripadmanaban on 3/19/2015.
  */
 public class CrimeFragment extends Fragment {
 
     private static final String DATE_FORMAT = "LLL dd, yyyy, EEEE, HH:mm:ss zzz";
+    private static final String DIALOG_DATE = "date";
     public static final String EXTRA_CRIME_ID =
             "com.example.sripadmanaban.criminalintent.crime_id";
+    private static final int REQUEST_DATE_TIME = 0;
+    private static final int REQUEST_DATE = 1;
+    private static final int REQUEST_TIME = 2;
 
     private Crime mCrime;
 
@@ -78,8 +85,18 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = (Button) view.findViewById(R.id.crime_date);
-        mDateButton.setText(DateFormat.format(DATE_FORMAT, mCrime.getDate()));
-        mDateButton.setEnabled(false);
+        updateDate();
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity()
+                        .getSupportFragmentManager();
+                DateAndTimePickerFragment dateAndTime = DateAndTimePickerFragment
+                        .newInstance(mCrime.getDate());
+                dateAndTime.setTargetFragment(CrimeFragment.this, REQUEST_DATE_TIME);
+                dateAndTime.show(fragmentManager, DIALOG_DATE);
+            }
+        });
 
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
@@ -92,5 +109,23 @@ public class CrimeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        Date date = (Date) data
+                .getSerializableExtra(DateAndTimePickerFragment.EXTRA_DATE_TIME);
+        if(date != null) {
+            mCrime.setDate(date);
+            updateDate();
+        }
+    }
+
+    private void updateDate() {
+        mDateButton.setText(DateFormat.format(DATE_FORMAT, mCrime.getDate()));
     }
 }
