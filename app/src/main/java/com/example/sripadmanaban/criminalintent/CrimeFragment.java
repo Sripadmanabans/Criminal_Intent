@@ -1,6 +1,5 @@
 package com.example.sripadmanaban.criminalintent;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -37,8 +36,6 @@ public class CrimeFragment extends Fragment {
     public static final String EXTRA_CRIME_ID =
             "com.example.sripadmanaban.criminalintent.crime_id";
     private static final int REQUEST_DATE_TIME = 0;
-    private static final int REQUEST_DATE = 1;
-    private static final int REQUEST_TIME = 2;
 
     private Crime mCrime;
 
