@@ -64,6 +64,7 @@ public class CrimePagerActivity extends ActionBarActivity{
 
         UUID crimeId = (UUID) getIntent()
                 .getSerializableExtra(CrimeFragment.EXTRA_CRIME_ID);
+
         for(int i = 0; i < mCrimes.size(); i++) {
             if(mCrimes.get(i).getId().equals(crimeId)) {
                 mViewPager.setCurrentItem(i);
