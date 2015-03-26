@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,8 +29,9 @@ public class CrimeListFragment extends ListFragment {
 
     private static final String TAG = "CrimeListFragment";
 
-    private ArrayList<Crime> mCrimes;
+    private Button mReportCrimeButton;
 
+    private ArrayList<Crime> mCrimes;
     private boolean mSubtitleVisible;
 
     @Override
@@ -49,7 +51,15 @@ public class CrimeListFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
+
+        mReportCrimeButton = (Button) view.findViewById(R.id.report_crime);
+        mReportCrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCrime();
+            }
+        });
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             if(mSubtitleVisible) {
@@ -81,11 +91,7 @@ public class CrimeListFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_crime :
-                Crime crime = new Crime();
-                CrimeLab.getInstance(getActivity()).addCrime(crime);
-                Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
-                intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getId());
-                startActivityForResult(intent, 0);
+                addCrime();
                 return true;
             case R.id.menu_item_show_subtitle :
                 if(((ActionBarActivity) getActivity())
@@ -146,5 +152,13 @@ public class CrimeListFragment extends ListFragment {
 
             return convertView;
         }
+    }
+
+    private void addCrime() {
+        Crime crime = new Crime();
+        CrimeLab.getInstance(getActivity()).addCrime(crime);
+        Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
+        intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getId());
+        startActivityForResult(intent, 0);
     }
 }
