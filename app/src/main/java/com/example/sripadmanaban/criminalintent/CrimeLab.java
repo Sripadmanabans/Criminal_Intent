@@ -12,21 +12,33 @@ import java.util.UUID;
  */
 public class CrimeLab {
 
+    private static final String TAG = "CrimeLab";
+    private static final String FILENAME = "crimes.json";
+
+    private CriminalIntentJSONSerializer mSerializer;
+
     private static CrimeLab sCrimeLab;
     private Context mAppContext;
 
     private ArrayList<Crime> mCrimes;
-
-    private CrimeLab(Context context) {
-        mAppContext = context;
-        mCrimes = new ArrayList<>();
-    }
 
     public static CrimeLab getInstance(Context context) {
         if(sCrimeLab == null) {
             sCrimeLab = new CrimeLab(context.getApplicationContext());
         }
         return sCrimeLab;
+    }
+
+    private CrimeLab(Context context) {
+        mAppContext = context;
+        mSerializer = new CriminalIntentJSONSerializer(mAppContext, FILENAME);
+
+        try {
+            mCrimes = mSerializer.loadCrime();
+        } catch (Exception e) {
+            mCrimes = new ArrayList<>();
+            Log.e(TAG, "Error loading Crimes : " , e);
+        }
     }
 
     public ArrayList<Crime> getCrimes() {
@@ -45,5 +57,16 @@ public class CrimeLab {
 
     public void addCrime(Crime crime) {
         mCrimes.add(crime);
+    }
+
+    public boolean saveCrimes() {
+        try {
+            mSerializer.saveCrimes(mCrimes);
+            Log.d(TAG, "Crimes saved to file");
+            return true;
+        } catch (Exception e) {
+            Log.d(TAG, "Error saving crimes : ", e);
+            return false;
+        }
     }
 }

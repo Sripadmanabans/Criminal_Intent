@@ -31,11 +31,12 @@ import java.util.UUID;
  */
 public class CrimeFragment extends Fragment {
 
-    private static final String DATE_FORMAT = "LLL dd, yyyy, EEEE, HH:mm:ss zzz";
     private static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE_TIME = 0;
+
+    public static final String DATE_FORMAT = "LLL dd, yyyy, EEEE, HH:mm:ss zzz";
     public static final String EXTRA_CRIME_ID =
             "com.example.sripadmanaban.criminalintent.crime_id";
-    private static final int REQUEST_DATE_TIME = 0;
 
     private Crime mCrime;
 
@@ -119,6 +120,12 @@ public class CrimeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.getInstance(getActivity()).saveCrimes();
     }
 
     @Override
